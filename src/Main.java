@@ -30,14 +30,14 @@ public class Main {
 
         char choice;
         do {
-            System.out.println("====== SYSTEM MENU ======");
+            System.out.println("================= SYSTEM MENU =================");
             System.out.println("<A> Booking ");
             System.out.println("<B> Hall  ");
             System.out.println("<C> Showtime  ");
             System.out.println("<D> Reboot Hall  ");
             System.out.println("<E> Booking History  ");
             System.out.println("<F> Exit");
-            System.out.println("============================");
+            System.out.println("===============================================");
             System.out.print("Please select MENU No (A-F): ");
             choice = scanner.next().toUpperCase().charAt(0);
 
@@ -103,14 +103,14 @@ public class Main {
 
     //method booking
     private static void booking(Scanner scanner) {
-        System.out.println("======================================");
+        System.out.println("===============================================");
         System.out.println("# Start Booking Process.....");
-        System.out.println("======================================");
+        System.out.println("===============================================");
         System.out.println("# Showtime Information :");
         showtime();
         pressEnterToContinue(scanner);
         char shift = chooseShowtime(scanner);
-        System.out.println("# Hall - " + (shift == 'A' ? "Morning" : shift == 'B' ? "Afternoon" : "Evening"));
+        System.out.println("# Hall - " + (shift == 'A' ? "A" : shift == 'B' ? "B" : "C"));
         display2DArray(shift == 'A' ? morningHall : shift == 'B' ? afternoonHall : eveningHall);
         System.out.println("# INSTRUCTION  ");
         System.out.println("# Single: C-1 ");
@@ -230,7 +230,9 @@ public class Main {
                 return;
         }
 
-        String[] seatTokens = seatInput.split(","); // Split  by comma
+        String[] seatTokens = seatInput.split(","); // Split by comma
+        boolean anySeatBooked = false; // Flag to check if any seat is booked
+        String bookedSeats = ""; // To store booked seats
         for (String seatToken : seatTokens) {
             String[] seatParts = seatToken.trim().split("-");
             if (seatParts.length != 2) {
@@ -249,15 +251,21 @@ public class Main {
             int columnIndex = column - 1; // Convert column number to index
             if (selectedHall[rowIndex][columnIndex] == 0) {
                 selectedHall[rowIndex][columnIndex] = studentID;
-                System.out.println("------------------------------------------------");
-                System.out.println("Booking successful for seat: " + seatToken);
-                System.out.println("------------------------------------------------");
+                if (!bookedSeats.isEmpty()) {
+                    bookedSeats += ",";
+                }
+                bookedSeats += seatToken;
+                anySeatBooked = true;
             } else {
-                System.out.println("------------------------------------------------");
                 System.out.println("Seat " + seatToken + " is already booked.");
-                System.out.println("------------------------------------------------");
             }
         }
+        if (anySeatBooked) {
+            System.out.println("Booking successful for seat(s): " + bookedSeats);
+        } else {
+            System.out.println("No seats were booked.");
+        }
+
     }
 
     private static boolean isValidSeat(char rowChar, int column) {
@@ -274,21 +282,27 @@ public class Main {
     }
 
     private static void showtime() {
+        System.out.println("===============================================");
         System.out.println("# A) Morning (10:00AM - 12:30PM) ");
         System.out.println("# B) Afternoon (1:00PM - 3:30PM) ");
         System.out.println("# C) Evening (4:00PM - 6:30PM) ");
+        System.out.println("===============================================");
     }
     private static char chooseShowtime(Scanner scanner) {
-        char shift;
+        String validInputPattern = "[A-C]";
+        Pattern pattern = Pattern.compile(validInputPattern);
+
+        String input;
         do {
-            System.out.println("======================================");
+            System.out.println("===============================================");
             System.out.print("Please Select Showtime (A | B | C ) : ");
-            shift = scanner.next().toUpperCase().charAt(0);
-            if (shift != 'A' && shift != 'B' && shift != 'C') {
+            input = scanner.next().toUpperCase();
+            if (!pattern.matcher(input).matches()) {
                 System.out.println("Invalid choice. Please try again.");
             }
-        } while (shift != 'A' && shift != 'B' && shift != 'C');
-        return shift;
+        } while (!pattern.matcher(input).matches());
+
+        return input.charAt(0);
     }
     private static void showHall() {
         System.out.println("# Hall Information ");
