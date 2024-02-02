@@ -4,6 +4,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.regex.*;
 
 public class Main {
+
     static int rows; //variable create array 2D
     static int columns; //variable create array 2D
     static int[][] morningHall; // Hall for morning showtime
