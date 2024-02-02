@@ -112,7 +112,7 @@ public class Main {
         pressEnterToContinue(scanner);
         char shift = chooseShowtime(scanner);
         System.out.println("# Hall - " + (shift == 'A' ? "A" : shift == 'B' ? "B" : "C"));
-        display2DArray(shift == 'A' ? morningHall : shift == 'B' ? afternoonHall : eveningHall);
+        disPlayRowSeatsHall(shift == 'A' ? morningHall : shift == 'B' ? afternoonHall : eveningHall);
         System.out.println("# INSTRUCTION  ");
         System.out.println("# Single: C-1 ");
         System.out.println("# Multiple ( separate by comma ) : C-1,C-2 ");
@@ -200,7 +200,7 @@ public class Main {
             char rowChar = seatParts[0].toUpperCase().charAt(0);
             int column = Integer.parseInt(seatParts[1]);
             // Validate seat
-            if (!isValidSeat(rowChar, column)) {
+            if (! isValidateSeat(rowChar, column)) {
                 System.out.println("Seat " + seatToken + " is not valid.");
                 return false;
             }
@@ -243,7 +243,7 @@ public class Main {
             char rowChar = seatParts[0].toUpperCase().charAt(0);
             int column = Integer.parseInt(seatParts[1]);
             // Validate seat
-            if (!isValidSeat(rowChar, column)) {
+            if (! isValidateSeat(rowChar, column)) {
                 System.out.println("Seat " + seatToken + " is not valid.");
                 continue;
             }
@@ -266,10 +266,9 @@ public class Main {
         } else {
             System.out.println("No seats were booked.");
         }
-
     }
 
-    private static boolean isValidSeat(char rowChar, int column) {
+    private static boolean isValidateSeat(char rowChar, int column) {
         int rowIndex = rowChar - 'A'; // Convert row character to index
         int columnIndex = column - 1; // Convert column number to index
         return rowIndex >= 0 && rowIndex < rows && columnIndex >= 0 && columnIndex < columns;
@@ -285,8 +284,8 @@ public class Main {
     private static void showtime() {
         System.out.println("===============================================");
         System.out.println("# A) Morning (10:00AM - 12:30PM) ");
-        System.out.println("# B) Afternoon (1:00PM - 3:30PM) ");
-        System.out.println("# C) Evening (4:00PM - 6:30PM) ");
+        System.out.println("# B) Afternoon (03:00PM - 05:30PM) ");
+        System.out.println("# C) Evening (07:00PM - 09:30PM) ");
         System.out.println("===============================================");
     }
     private static char chooseShowtime(Scanner scanner) {
@@ -309,18 +308,17 @@ public class Main {
         System.out.println("# Hall Information ");
         System.out.println("------------------------------------------------");
         System.out.println("# Hall - Morning");
-        display2DArray(morningHall);
+        disPlayRowSeatsHall(morningHall);
         System.out.println("------------------------------------------------");
         System.out.println("# Hall - Afternoon");
-        display2DArray(afternoonHall);
+        disPlayRowSeatsHall(afternoonHall);
         System.out.println("------------------------------------------------");
         System.out.println("# Hall - Evening");
-        display2DArray(eveningHall);
+        disPlayRowSeatsHall(eveningHall);
     }
-
-    private static void display2DArray(int[][] hall) {
+    private static void disPlayRowSeatsHall(int[][] hall) {
         char rowChar = 'A'; // Starting character for row labels
-        for (int i = 0; i < hall.length; i++) {
+        for(int i = 0; i < hall.length; i++) {
             int columnValue = 1; // Starting value for each column
             for (int j = 0; j < hall[i].length; j++) {
                 String status = hall[i][j] == 0 ? "AV" : "BO";
@@ -336,8 +334,9 @@ public class Main {
         System.out.println("------------------------------------------------");
         System.out.println(" Rebooted hall successfully..");
 
-        setUpHall(scanner);
         pressEnterToContinue(scanner);
+        setUpHall(scanner);
+
     }
     private static void displayBookingHistory() {
         System.out.println("# Booking History:");
@@ -358,11 +357,12 @@ public class Main {
         String seats;
         int studentID;
         String createdAt;
-        BookingRecord(char showtime, String seats, int studentID, String createdAt) {
-            this.showtime = showtime;
-            this.seats = seats;
-            this.studentID = studentID;
-            this.createdAt = createdAt;
+
+        BookingRecord(char showtimeParam, String seatsParam, int studentIDParam, String createdAtParam) {
+            showtime = showtimeParam;
+            seats = seatsParam;
+            studentID = studentIDParam;
+            createdAt = createdAtParam;
         }
     }
 }
